@@ -1,0 +1,15 @@
+FROM continuumio/miniconda3
+
+WORKDIR /app
+
+# Create the environment:
+COPY environment.yml .
+RUN conda env create -f environment.yml
+
+# Make RUN commands use the new environment:
+# Ref: https://pythonspeed.com/articles/activate-conda-dockerfile/
+SHELL ["conda", "run", "-n", "myenv", "/bin/bash", "-c"]
+
+COPY . .
+
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "myenv", "python", "app.py"]

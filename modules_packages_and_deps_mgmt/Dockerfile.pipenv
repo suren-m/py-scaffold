@@ -1,0 +1,19 @@
+# syntax=docker/dockerfile:1
+
+FROM python:3.8-slim-bullseye
+
+WORKDIR /app
+
+RUN pip3 install pipenv
+
+COPY Pipfile .
+
+# Below doesn't go well with Docker. use install and deploy instead.
+# RUN pipenv shell
+
+# install globally (inside the container) and validate lock file
+RUN pipenv install
+
+COPY . .
+
+CMD ["pipenv", "run",  "python", "app.py"]
